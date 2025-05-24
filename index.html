@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Screamer fullscreen sin distorsión</title>
+  <style>
+    body {
+      background: #fff8f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .heart {
+      width: 100px;
+      height: 90px;
+      background: red;
+      position: relative;
+      transform: rotate(-45deg);
+      transition: opacity 0.5s;
+      z-index: 2;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      width: 100px;
+      height: 90px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -50px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 50px;
+      top: 0;
+    }
+
+    .heart.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .screamer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .screamer img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" onclick="mostrarScreamer(event)">
+    <div class="heart" id="corazon"></div>
+  </div>
+
+  <div class="screamer" id="screamer">
+    <img src="screamer.jpeg" alt="¡AHHH!" />
+    <audio id="grito" src="grito.mp3"></audio>
+  </div>
+
+  <script>
+    function mostrarScreamer(event) {
+      // Fullscreen inmediato en el click
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+      }
+
+      const corazon = document.getElementById('corazon');
+      const screamer = document.getElementById('screamer');
+      const audio = document.getElementById('grito');
+
+      corazon.classList.add('hidden');
+
+      screamer.style.display = "flex";
+      audio.play().catch(e => {
+        console.log("Audio bloqueado por el navegador");
+      });
+    }
+  </script>
+</body>
+</html>
